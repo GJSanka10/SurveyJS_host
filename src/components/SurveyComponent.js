@@ -555,18 +555,43 @@ const SurveyComponent = () => {
 
   const survey = useMemo(() => new Model(surveyJson), [surveyJson]);
 
+  // Hook to render address autocomplete component after question rendering
   useEffect(() => {
     survey.onAfterRenderQuestion.add((survey, options) => {
       if (options.question.name === 'address1') {
         const container = document.getElementById('address-autocomplete-container');
         if (container) {
+          // Render your AddressAutocomplete component
           ReactDOM.render(<AddressAutocomplete />, container);
         }
       }
     });
   }, [survey]);
 
-  return <Survey model={survey} />;
+  // Function to handle survey completion
+  const handleSurveyComplete = async (result) => {
+    const response = result.data;
+    try {
+      // Send survey response to your server
+      const res = await fetch('http://localhost:5000/api/survey-responses', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(response),
+      });
+      const data = await res.json();
+      console.log('Survey response saved:', data);
+    } catch (error) {
+      console.error('Error saving survey response:', error);
+    }
+  };
+
+  // Assign handleSurveyComplete function to survey onComplete event
+  survey.onComplete.add(handleSurveyComplete);
+
+  // Render the Survey component
+  return <Survey.Survey model={survey} />;
 };
 
 export default SurveyComponent;

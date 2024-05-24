@@ -1,6 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
 import SurveyComponent from './components/SurveyComponent';
+import Test from './components/Test';
+
 
 function App() {
   return (
@@ -9,7 +11,8 @@ function App() {
       <h1>SurveyJS React App</h1>
     </header> */}
     <main>
-      <SurveyComponent />
+      {/* <SurveyComponent /> */}
+      <Test/>
     </main>
   </div>
   );
